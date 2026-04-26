@@ -1,0 +1,7 @@
+# Habit Tracker Backend - Commands
+
+## Run Tests (with detailed PASS/FAIL status)
+./mvnw test -Dsurefire.useFile=false
+
+## Run Application
+./mvnw spring-boot:run
