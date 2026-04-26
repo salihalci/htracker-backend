@@ -81,29 +81,39 @@ The Habit Tracker Backend follows a **layered architecture** pattern:
 ## Project Structure
 
 ```
-ht-srvc/
-├── src/main/java/com/htbackend/srvc/
-│   ├── SrvcApplication.java          # Main application entry point
-│   ├── controller/
-│   │   └── HabitController.java       # REST API endpoints
-│   ├── service/
-│   │   └── HabitService.java          # Business logic
-│   ├── entity/
-│   │   ├── Habit.java                  # Habit entity
-│   │   ├── HabitCompletion.java        # Completion record entity
-│   │   └── HabitFrequency.java         # Frequency enum
-│   ├── dto/
-│   │   ├── HabitRequest.java           # Request DTO
-│   │   └── HabitResponse.java          # Response DTO
-│   ├── repository/
-│   │   ├── HabitRepository.java        # Habit data access
-│   │   └── HabitCompletionRepository.java  # Completion data access
-│   ├── config/
-│   │   └── OpenApiConfig.java          # Swagger configuration
-│   └── exception/                      # (extensible)
-├── src/main/resources/
-│   └── application.properties          # Application configuration
-└── pom.xml                             # Maven dependencies
+htracker-backend/
+├── ht-srvc/
+│   ├── src/main/java/com/htbackend/srvc/
+│   │   ├── SrvcApplication.java          # Main application entry point
+│   │   ├── controller/
+│   │   │   └── HabitController.java       # REST API endpoints
+│   │   ├── service/
+│   │   │   └── HabitService.java          # Business logic
+│   │   ├── entity/
+│   │   │   ├── Habit.java                  # Habit entity
+│   │   │   ├── HabitCompletion.java        # Completion record entity
+│   │   │   └── HabitFrequency.java         # Frequency enum
+│   │   ├── dto/
+│   │   │   ├── HabitRequest.java           # Request DTO
+│   │   │   └── HabitResponse.java          # Response DTO
+│   │   ├── repository/
+│   │   │   ├── HabitRepository.java        # Habit data access
+│   │   │   └── HabitCompletionRepository.java  # Completion data access
+│   │   ├── config/
+│   │   │   └── OpenApiConfig.java          # Swagger configuration
+│   │   └── exception/                      # (extensible)
+│   ├── src/test/java/com/htbackend/srvc/
+│   │   ├── SrvcApplicationTests.java       # Spring Boot context test
+│   │   ├── controller/
+│   │   │   └── HabitControllerTest.java    # Controller unit tests
+│   │   └── service/
+│   │       └── HabitServiceTest.java       # Service unit tests
+│   ├── src/main/resources/
+│   │   └── application.properties          # Application configuration
+│   ├── pom.xml                             # Maven dependencies
+│   └── habits.db                           # SQLite database
+├── commands.txt                            # Quick reference commands
+└── README.md                               # This documentation
 ```
 
 ---
@@ -291,6 +301,10 @@ spring.sql.init.mode=never
 - Java 25+
 - Maven
 
+### Quick Start
+
+For quick reference, see [`commands.txt`](commands.txt) for common commands.
+
 ### Build
 
 ```bash
@@ -311,6 +325,57 @@ The application starts on `http://localhost:8080`
 ```bash
 ./mvnw package -DskipTests
 java -jar target/srvc-0.0.1-SNAPSHOT.jar
+```
+
+### Run Tests
+
+```bash
+./mvnw test
+```
+
+---
+
+## Testing
+
+### Unit Tests
+
+The project includes comprehensive unit tests with **29 test cases** covering:
+
+#### `HabitServiceTest` (15 tests)
+- ✅ CRUD operations (create, read, update, delete)
+- ✅ Habit completion operations (mark/unmark complete)
+- ✅ Streak calculation scenarios
+- ✅ Exception handling
+
+#### `HabitControllerTest` (13 tests)
+- ✅ All REST endpoints (GET, POST, PUT, DELETE)
+- ✅ Success scenarios (200, 201, 204)
+- ✅ Error scenarios (400, 404)
+- ✅ Request/response validation
+
+#### `SrvcApplicationTests` (1 test)
+- ✅ Spring Boot context loads successfully
+
+### Test Coverage Summary
+
+| Test Class | Tests | Description |
+|------------|-------|-------------|
+| `HabitServiceTest` | 15 | Business logic testing |
+| `HabitControllerTest` | 13 | REST API endpoint testing |
+| `SrvcApplicationTests` | 1 | Integration test |
+| **Total** | **29** | **100% pass rate** |
+
+### Running Tests
+
+```bash
+# Run all tests
+./mvnw test
+
+# Run specific test class
+./mvnw test -Dtest=HabitServiceTest
+
+# Run with coverage report
+./mvnw test jacoco:report
 ```
 
 ---
